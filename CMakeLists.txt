@@ -6,11 +6,19 @@
 cmake_minimum_required (VERSION 3.1.3)
 
 # Set software information
-project(libsndfile VERSION 1.0.28.0)
+project(libsndfile VERSION 1.0.28)
+
+# Variables
+
+set (CPACK_PACKAGE_VERSION_MAJOR ${${PROJECT_VERSION}_MAJOR})
+set (CPACK_PACKAGE_VERSION_MINOR ${${PROJECT_VERSION}_MINOR})
+set (CPACK_PACKAGE_VERSION_PATCH ${${PROJECT_VERSION}_PATCH})
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}pre1")
 
 ## System-wide includes
 
 include (GNUInstallDirs)
+include (CPack)
 
 # Options
 option (BUILD_STATIC_LIBS "Build shared libraries" ON)
@@ -22,9 +30,6 @@ BUILD_STATIC_LIBS is now set to ON.\n")
 set (BUILD_STATIC_LIBS ON)
 endif ()
 option (ENABLE_TESTING "Enable testing" OFF)
-
-SET(LIB_VERSION_PATCH pre1)
-set(LIB_VERSION ${PROJECT_VERSION}pre1)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
 set_directory_properties(PROPERTIES EP_PREFIX ${CMAKE_BINARY_DIR}/library-build)
@@ -57,7 +62,7 @@ set (PC_PREFIX ${CMAKE_INSTALL_PREFIX})
 set (PC_EXEC_PREFIX "\$\{prefix\}")
 set (PC_LIBDIR "\$\{prefix\}/${CMAKE_INSTALL_LIBDIR}")
 set (PC_INCLUDEDIR "\$\{prefix\}/${CMAKE_INSTALL_INCLUDEDIR}")
-set (PC_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
+set (PC_VERSION ${PROJECT_VERSION})
 if (EXTERNAL_XIPH_LIBS)
 set (PC_PRIVATE_LIBS "-lFLAC  -lvorbisenc")
 endif ()
@@ -255,7 +260,7 @@ set_property(TARGET ${SNDFILE_SHARED_TARGET} PROPERTY C_STANDARD 99)
 set_target_properties (${SNDFILE_SHARED_TARGET}
 			PROPERTIES
 			SOVERSION ${PROJECT_VERSION_MAJOR}
-			VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_TWEAK}"
+			VERSION ${PROJECT_VERSION}
 			PUBLIC_HEADER "${libsndfile_PUBLIC_HEADERS}")
 if (WIN32)
 	set_target_properties(${SNDFILE_SHARED_TARGET} PROPERTIES PREFIX "lib")
